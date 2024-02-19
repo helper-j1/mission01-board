@@ -1,0 +1,38 @@
+# applicatdion.yml : 스프링부트와 같은 스프링 프로젝트 기반 어플리케이션에서 사용되는 설정 파일
+# 만약 application.properties 가 있다면, 어플을 실행시킬시 properties 의 설정으로 실행됨.
+
+server:
+  # 서버 포트 번호 설정
+  port: 8080
+  servlet:
+    encoding:
+      # 웹 어플리케이션에서 문자 인코딩 문제를 방지하기 위한 설정들
+      charset: UTF-8
+      enabled: true
+      force: true
+spring:
+  # DataSource Configuration
+  # Mysql 연결을 위한 설정들
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ohgiraffers_db?serverTimezone=Asia/Seoul
+    username: ohgiraffers
+    password: ohgiraffers
+
+  # JPA/Hibernate Configuration
+  # 하이버네이트란?
+  # 하이버네이트는 JPA의 구현체로, 자바 객체와 데이터 베이스 테이블 사이의 매핑을 관리해주는 ORM(Object-Relational-Mapping)
+  # ddl-auto
+  # update : 어플리케이션 시작시 데이터베이스 스키마를 업데이트함
+  # create : 어플리케이션 시작시 새로운 데이터베이스 스키마 생성, 기존 스키마는 사라짐. 어플리케이션 종료시 데이터 남아있음.
+  # create-drop : 어플리케이션 시작시 새로운 스키마를 생성하고, 어플리케이션 종료시 스키마를 삭제함.
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        # 하이버네이트가 생성해주는 SQL문을 콘솔에 보이도록 설정
+        show_sql: true
+
+
