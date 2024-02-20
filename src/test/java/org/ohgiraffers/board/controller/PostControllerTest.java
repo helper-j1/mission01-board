@@ -166,15 +166,6 @@ public class PostControllerTest {
     //given은 서비스를 가짜로만들었으니,  mock으로만든단건, 서비스로직을 껍데기만 가져와서,
     //메소드는있지만 안의 내용이없으니.. 똑같이 업데이트리스폰스를
 
-    @Test
-    @DisplayName("삭제")
-    void delete_post_test() throws Exception {
-
-        //given  어떤걸할지
-        Long postId =1L;
-        DeletePostResponse response = new DeletePostResponse(1L);
-
-    }
 
 }
 
