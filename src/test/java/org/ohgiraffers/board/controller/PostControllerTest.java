@@ -8,8 +8,14 @@ import org.ohgiraffers.board.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -167,6 +173,61 @@ public class PostControllerTest {
     //메소드는있지만 안의 내용이없으니.. 똑같이 업데이트리스폰스를
 
 
+    //딜리트부터 만들어보자!
+    @Test
+    @DisplayName("게시글 삭제")
+    void delete_post_test() throws Exception {
+
+        //given  어떤걸할지
+        Long postId = 1L;  //먼저 대상으로 지정할 post아이디가 필요, 그리고 리스폰스필요.
+        DeletePostResponse deletePostResponse = new DeletePostResponse(postId);
+        //리스폰스엔 만들어둔 포스트아이디와, 제목들어가네? ㅋㅋ 안되지? post아이디뿐이니
+        given(postService.deletePost(any(Long.class))).willReturn(deletePostResponse);
+
+        mockMvc.perform(delete("/api/v1/posts/{postId}", postId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.postId").value(1L))
+                .andDo(print());
+
+        //when & then
+        //이렇게 삭제기능 테스트해봣고, 페이징, 전체조회만들어보자
+
+    }
+    @Test
+    @DisplayName("모든 게시글 페이지 단위로 조회하는 기능 테스트")
+    void read_all_post_test() throws Exception{
+        //given
+        //컨트롤러하는걸 해야하니,
+        int page=0;
+        int size=5;
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+        //이렇게 구성해야함.ㅋ 이전에 했었나 ㅋ 봐보자
+
+        //여러개 들어가있으니 리드포스트리스폰스도있읜 만들어주자
+        ReadPostResponse readPostResponse = new ReadPostResponse(1L,"테스트제목", "테스트내용");
+                //페이징처리시, 한개로는 못하니, 리스트형식으로 만들어주자.
+        List<ReadPostResponse> responses = new ArrayList<>();
+        responses.add(readPostResponse);
+        //이제 페이지로 만들어보자,
+        //페이징처리된 리드포스트리스폰스다..
+        Page<ReadPostResponse> pageResponse = new PageImpl<>(responses,pageRequest,responses.size());  //사이즈로 크기넣어줌.
+                //이런식으로
+        //그리고이제
+        given(postService.readAllPost(any())).willReturn(pageResponse);
+                //기븐처리해주고
+
+
+        mockMvc.perform(get("/api/v1/posts"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].postId").value(readPostResponse.getPostId()))
+                .andExpect(jsonPath("$.content[0].title").value(readPostResponse.getTitle()))
+                .andExpect(jsonPath("$.content[0].content").value(readPostResponse.getContent()))
+                .andDo(print());
+        //when & then
+        //성공하는걸 볼수있다.  금방닫네 ㅋ    0번째 포스트아이디를 리스폰스의 0번째랑 비교한거고, 타이틀, 컨텐츠 다 비교한거다.
+
+    }
 }
 
 
