@@ -51,7 +51,7 @@ public class PostService {
 
         Post foundPost = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
-
+                //예외처리했네? 여기서.. 테스트로 확인해보자!
         return new ReadPostResponse(foundPost.getPostId(), foundPost.getTitle(), foundPost.getContent());
     }
 
@@ -87,7 +87,8 @@ public class PostService {
     }
 }
 
-
+//서비스보면 외부의존해서 처리하는 로직있는데, 세이브드팟이그럼! <-- given으로 만들어주자 ㅋ
+//when으로 이번엔
 
 
 

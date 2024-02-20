@@ -227,6 +227,8 @@ public class PostControllerTest {
         //when & then
         //성공하는걸 볼수있다.  금방닫네 ㅋ    0번째 포스트아이디를 리스폰스의 0번째랑 비교한거고, 타이틀, 컨텐츠 다 비교한거다.
 
+
+
     }
 }
 
